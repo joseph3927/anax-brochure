@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#190d30">
+<meta name="description" content="ANAX 병원 AX 자동화 서비스 소개 모바일 전자브로슈어">
+<meta property="og:type" content="website">
+<meta property="og:title" content="ANAX 병원 AX 자동화">
+<meta property="og:description" content="40분 걸리던 병원 아침 업무를 2분으로 줄이는 ANAX 서비스 소개">
+<title>ANAX 병원 AX 자동화 - 모바일 전자브로슈어</title>
+<style>
+  :root{
+    --night:#190d30;--night2:#29134a;--purple:#7147e8;--purple2:#9a76ef;
+    --coral:#f15f66;--rose:#d63b70;--cream:#f6f1e9;--paper:#fffdf9;
+    --ink:#1c1930;--muted:#716d7d;--line:#e7e0ec;--green:#16885a;
+    --green-soft:#e9f7ef;--shadow:0 22px 55px -32px rgba(28,13,48,.45);
+    --max:600px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;background:#e9e5ed}
+  body{
+    font-family:Pretendard,"Apple SD Gothic Neo","Malgun Gothic",-apple-system,BlinkMacSystemFont,sans-serif;
+    color:var(--ink);line-height:1.65;background:#e9e5ed;-webkit-font-smoothing:antialiased;
+  }
+  img{display:block;max-width:100%}
+  button,a{font:inherit}
+  a{color:inherit;text-decoration:none}
+  .brochure{width:100%;max-width:var(--max);margin:0 auto;background:var(--paper);box-shadow:0 0 70px rgba(30,18,45,.16);overflow:hidden}
+  .scroll-progress{position:fixed;z-index:100;left:50%;top:0;transform:translateX(-50%);width:min(100%,var(--max));height:3px;background:rgba(255,255,255,.14)}
+  .scroll-progress i{display:block;width:0;height:100%;background:linear-gradient(90deg,#c7b0ff,#f15f66)}
+  .topbar{
+    position:sticky;top:0;z-index:90;height:58px;padding:0 18px;display:flex;align-items:center;gap:12px;
+    background:rgba(25,13,48,.94);color:#fff;border-bottom:1px solid rgba(255,255,255,.1);backdrop-filter:blur(14px)
+  }
+  .brand{font-size:18px;font-weight:900;letter-spacing:.18em}.brand b{color:var(--coral)}
+  .top-sub{font-size:12px;color:#bfb3d8;font-weight:700;letter-spacing:.02em}
+  .topbar .sample{margin-left:auto;font-size:10px;font-weight:800;color:#f1d7ad;border:1px solid rgba(241,215,173,.3);border-radius:999px;padding:5px 8px}
+  .quick-nav{
+    position:sticky;top:58px;z-index:80;display:flex;gap:8px;overflow-x:auto;padding:10px 14px;background:rgba(255,253,249,.95);
+    border-bottom:1px solid var(--line);scrollbar-width:none;backdrop-filter:blur(12px)
+  }
+  .quick-nav::-webkit-scrollbar{display:none}
+  .quick-nav a{flex:none;font-size:13px;font-weight:800;color:#685f73;background:#f3eef7;border:1px solid #e8deef;border-radius:999px;padding:8px 13px}
+  .quick-nav a.sec{color:#116b46;background:#eaf7f0;border-color:#cfeada}
+  .quick-nav a.basic{color:#6840d5}.quick-nav a.pro{color:#a13e25}
+  main{display:flex;flex-direction:column}
+  main>section{order:10}
+  main>.page:nth-of-type(1){order:1}
+  main>.page:nth-of-type(2){order:5}
+  main>.page:nth-of-type(3){order:3}
+  main>.page:nth-of-type(4){order:4}
+  main>.page:nth-of-type(5){order:2}
+  #security{order:6}
+  main>.page[data-page="07"]{order:7}
+  main>.page[data-page="08"]{order:8}
+  main>.time-focus{order:9}
+  .page{position:relative;padding:74px 24px;overflow:hidden}
+  .page::after{content:attr(data-page);position:absolute;right:18px;bottom:-15px;font-size:78px;font-weight:900;color:rgba(90,67,120,.07);letter-spacing:-.08em;pointer-events:none}
+  .page.cream{background:var(--cream)}.page.white{background:var(--paper)}.page.soft{background:#f7f4fa}
+  .page.dark{background:linear-gradient(160deg,var(--night),var(--night2));color:#fff}
+  .page.security{background:linear-gradient(160deg,#0d2825,#153832 58%,#1b1335);color:#fff}
+  .kicker{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:900;letter-spacing:.1em;color:var(--purple);text-transform:uppercase}
+  .kicker::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--coral)}
+  .dark .kicker{color:#d6c4fb}.security .kicker{color:#9ce0bc}.security .kicker::before{background:#36c77d}
+  h1{font-size:clamp(38px,11.5vw,58px);font-weight:900;line-height:1.15;letter-spacing:-.055em}
+  h2{margin-top:15px;font-size:clamp(29px,8.4vw,42px);font-weight:900;line-height:1.24;letter-spacing:-.045em;word-break:keep-all}
+  h3{font-size:22px;font-weight:900;line-height:1.35;letter-spacing:-.03em}
+  .lead{margin-top:18px;font-size:17px;color:var(--muted);font-weight:550;word-break:keep-all}
+  .dark .lead{color:#c9bddf}.security .lead{color:#b7d8ca}
+  .purple{color:var(--purple)}.coral{color:var(--coral)}.green{color:#62dda0}
+  .tiny{font-size:12.5px;color:#9992a2;font-weight:650;line-height:1.6}
+  .cover{min-height:calc(100svh - 58px);display:flex;flex-direction:column;justify-content:center;padding:64px 26px 50px;background:
+    radial-gradient(85% 55% at 88% 8%,rgba(241,95,102,.38),transparent 65%),
+    linear-gradient(168deg,#130826 0%,#241045 54%,#43165d 100%);color:#fff}
+  .cover::before{content:"";position:absolute;width:310px;height:310px;right:-150px;bottom:70px;border:1px solid rgba(226,195,255,.2);border-radius:50%;box-shadow:0 0 0 38px rgba(226,195,255,.04),0 0 0 82px rgba(226,195,255,.03)}
+  .cover .edition{display:inline-flex;align-items:center;gap:8px;width:max-content;border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:7px 12px;font-size:10px;font-weight:850;color:#d7c9ef;background:rgba(255,255,255,.06)}
+  .cover h1{margin-top:28px}.cover h1 span{background:linear-gradient(120deg,#d8c7ff,#f7a2a6);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .cover .subtitle{margin-top:20px;font-size:18px;color:#d5c9e8;font-weight:600;line-height:1.7}
+  .cover-proof{margin-top:32px;display:grid;grid-template-columns:1fr 1fr;gap:9px;position:relative}
+  .cover-proof div{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:15px}
+  .cover-proof strong{display:block;font-size:22px;color:#fff}.cover-proof span{display:block;margin-top:5px;font-size:13px;line-height:1.45;color:#bfaed8;font-weight:700}
+  .cover-time{position:relative;margin-top:11px;padding:13px 15px;border-radius:16px;display:flex;align-items:center;justify-content:space-between;gap:14px;background:linear-gradient(120deg,rgba(241,95,102,.18),rgba(154,118,239,.17));border:1px solid rgba(255,255,255,.14)}
+  .cover-time span{font-size:13px;color:#d6c9e8;font-weight:750}.cover-time strong{font-size:23px;color:#fff;white-space:nowrap;letter-spacing:-.04em}
+  .scroll-cue{margin-top:30px;display:flex;align-items:center;gap:10px;color:#ad9cc9;font-size:13px;font-weight:750}.scroll-cue i{width:30px;height:48px;border:1px solid rgba(255,255,255,.28);border-radius:18px;position:relative}.scroll-cue i::after{content:"";position:absolute;left:50%;top:10px;width:3px;height:8px;background:#fff;border-radius:3px;transform:translateX(-50%);animation:scroll 1.6s infinite}
+  @keyframes scroll{0%{opacity:.2;transform:translate(-50%,0)}55%{opacity:1}100%{opacity:0;transform:translate(-50%,16px)}}
+  .metric-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:28px}
+  .metric{border-radius:18px;padding:19px 17px;background:#fff;border:1px solid var(--line);box-shadow:var(--shadow)}
+  .dark .metric{background:rgba(255,255,255,.055);border-color:rgba(255,255,255,.12)}
+  .metric strong{display:block;font-size:30px;line-height:1;color:var(--purple);letter-spacing:-.04em}.dark .metric strong{color:#e3d4ff}
+  .metric strong.compact{font-size:25px;white-space:nowrap}
+  .metric b{display:block;margin-top:8px;font-size:14px}.metric small{display:block;margin-top:5px;font-size:11.5px;color:#9a93a2;font-weight:650;line-height:1.4}
+  .quote{margin-top:24px;border-left:4px solid var(--coral);padding:16px 18px;background:rgba(241,95,102,.08);border-radius:0 16px 16px 0;font-size:17px;font-weight:850;line-height:1.5}
+  .duo{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:26px}
+  .duo-card{padding:22px 14px;border-radius:20px;text-align:center;background:var(--night);color:#fff;box-shadow:var(--shadow)}
+  .duo-card i{display:flex;width:38px;height:38px;margin:0 auto 13px;border-radius:50%;align-items:center;justify-content:center;background:rgba(255,255,255,.09);font-style:normal}
+  .duo-card small{font-size:12.5px;color:#c7b8df;font-weight:700}.duo-card strong{display:block;margin-top:7px;font-size:22px;line-height:1.25;background:linear-gradient(120deg,#c9b2ff,#f27f86);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .compare-stack{display:flex;flex-direction:column;gap:10px;margin-top:25px}
+  .compare-card{padding:18px;border:1px solid var(--line);border-radius:18px;background:#fff}.compare-card.highlight{background:linear-gradient(135deg,#f1ebff,#eee4ff);border-color:#d9c9f6}
+  .compare-card span{font-size:12px;font-weight:900;color:#9992a2;letter-spacing:.08em}.compare-card.highlight span{color:var(--purple)}
+  .compare-card b{display:block;margin-top:7px;font-size:18px}.compare-card p{margin-top:6px;font-size:15px;color:var(--muted);line-height:1.55}
+  .screen-shell{margin-top:28px;padding:10px;background:#fff;border:1px solid #ddd4e7;border-radius:24px;box-shadow:0 28px 60px -36px rgba(35,18,56,.7);position:relative}
+  .screen-shell::before{content:"";display:block;width:38px;height:4px;border-radius:4px;background:#d9d2df;margin:1px auto 9px}
+  .screen-shell img{width:100%;border-radius:15px}
+  .screen-note{margin-top:11px;display:flex;justify-content:space-between;gap:12px;font-size:12px;color:#968e9e;font-weight:750}
+  .security-hero{display:flex;align-items:center;gap:17px;margin-top:24px}
+  .lock{flex:none;width:72px;height:72px;border:1px solid rgba(98,221,160,.3);border-radius:24px;display:flex;align-items:center;justify-content:center;background:rgba(98,221,160,.1);color:#62dda0}
+  .lock svg{width:38px;height:38px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+  .security-list{display:flex;flex-direction:column;gap:10px;margin-top:28px}
+  .security-item{display:flex;gap:12px;padding:16px;border-radius:17px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1)}
+  .security-item i{flex:none;width:25px;height:25px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#28a96b;color:#fff;font-size:12px;font-style:normal;font-weight:900}
+  .security-item b{display:block;font-size:16px;line-height:1.45}.security-item p{margin-top:5px;font-size:14px;line-height:1.6;color:#a9cdbd;font-weight:600}
+  .data-flow{margin-top:25px;background:#fff;border-radius:22px;padding:18px;color:var(--ink)}
+  .flow-title{font-size:13px;color:var(--green);font-weight:900}
+  .flow-row{display:grid;grid-template-columns:1fr 22px 1fr 22px 1fr;align-items:center;gap:3px;margin-top:14px}
+  .flow-node{padding:13px 6px;border-radius:13px;background:#f0f8f4;text-align:center;font-size:12px;font-weight:850;line-height:1.45}.flow-arrow{text-align:center;color:var(--green);font-weight:900}
+  .security-foot{margin-top:16px;font-size:12px;color:#8eb5a3;font-weight:650;line-height:1.65}
+  .stat-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:25px}
+  .stat-card{padding:18px 15px;border-radius:18px;background:#fff;border:1px solid var(--line)}
+  .stat-card strong{font-size:30px;color:var(--rose);line-height:1}.stat-card b{display:block;margin-top:8px;font-size:14px;line-height:1.45}.stat-card small{display:block;margin-top:6px;font-size:11px;color:#9b94a0;line-height:1.45}
+  .question-list{display:flex;flex-direction:column;gap:12px;margin-top:26px}
+  .question{padding:20px;border-radius:19px;background:#fff;border:1px solid var(--line);display:flex;gap:13px}
+  .question i{flex:none;width:34px;height:34px;border-radius:11px;background:#efe9fb;color:var(--purple);display:flex;align-items:center;justify-content:center;font-style:normal;font-size:12px;font-weight:900}
+  .question b{font-size:17px}.question p{margin-top:5px;font-size:15px;line-height:1.55;color:var(--muted)}
+  .friction{margin-top:24px;border-radius:22px;background:var(--night);color:#fff;padding:20px}
+  .friction li{list-style:none;display:flex;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px dashed rgba(255,255,255,.12);font-size:14px;color:#d7cae8;font-weight:650}
+  .friction li b{color:#f49a9f;white-space:nowrap}.friction-total{display:flex;align-items:baseline;justify-content:space-between;margin-top:16px}.friction-total span{font-size:14px;color:#bfafd6}.friction-total strong{font-size:36px}
+  .tier-intro{display:grid;grid-template-columns:1fr;gap:12px;margin-top:28px}
+  .tier-card{border-radius:20px;padding:21px;background:#fff;border:1px solid var(--line);display:grid;grid-template-columns:70px 1fr;gap:15px;align-items:center}
+  .tier-card .tier-code{width:66px;height:66px;border-radius:18px;background:#eee8fb;color:var(--purple);display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:950}
+  .tier-card.pro .tier-code{background:#fff0e8;color:#bd4d2a}
+  .tier-card h3{font-size:20px}.tier-card p{margin-top:5px;font-size:14px;line-height:1.55;color:var(--muted);font-weight:600}
+  .tier-card .count{display:inline-block;margin-top:8px;font-size:12px;font-weight:900;color:#777087}
+  .tier-section{padding:72px 18px;background:#f4f0f7}
+  .tier-section.pro-bg{background:#faf3ed}
+  .tier-head{padding:0 6px 26px}.tier-label{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:8px 13px;background:#eae3fb;color:#6840d5;font-size:12px;font-weight:950;letter-spacing:.07em}
+  .pro-bg .tier-label{background:#ffeadf;color:#a94327}
+  .tier-head h2{margin-top:14px}.tier-head p{margin-top:12px;font-size:15.5px;line-height:1.65;color:var(--muted)}
+  .program-list{display:flex;flex-direction:column;gap:22px}
+  .program-card{background:#fff;border:1px solid rgba(74,53,92,.12);border-radius:24px;overflow:hidden;box-shadow:var(--shadow)}
+  .program-copy{padding:23px 20px 19px}.program-code{font-size:12px;font-weight:950;letter-spacing:.1em;color:var(--purple)}.pro-bg .program-code{color:#ad4828}
+  .program-copy h3{margin-top:6px}.program-copy p{margin-top:9px;font-size:15.5px;line-height:1.65;color:var(--muted);font-weight:600;word-break:keep-all}
+  .screen-wrap{position:relative;background:#ece9f0;border-top:1px solid #eee8f1;padding:10px}
+  .screen-wrap img{width:100%;border-radius:14px;cursor:zoom-in}
+  .zoom-tag{position:absolute;right:18px;bottom:18px;border:0;border-radius:999px;background:rgba(25,13,48,.86);color:#fff;padding:8px 11px;font-size:11px;font-weight:850;pointer-events:none}
+  .sample-strip{padding:11px 18px;background:#faf8fc;color:#9b94a2;font-size:11px;font-weight:750;border-top:1px solid #eee9f1}
+  .outcome-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:26px}
+  .outcome{padding:18px;border-radius:18px;background:#fff;border:1px solid var(--line);text-align:center}
+  .outcome strong{font-size:30px;color:var(--purple)}.outcome span{display:block;margin-top:4px;font-size:13.5px;font-weight:800}
+  .action-card{margin-top:24px;border-radius:24px;padding:22px;background:linear-gradient(150deg,#9f43d2,#7147e8 60%,#40135f);color:#fff}
+  .action-card .tag{font-size:12px;font-weight:900;color:#e8ddff}.action-card h3{margin-top:10px;font-size:24px}.action-card ul{margin-top:14px;display:flex;flex-direction:column;gap:9px}.action-card li{list-style:none;font-size:14px;color:#eee8ff}.action-card li::before{content:"✓";margin-right:8px}.action-money{margin-top:17px;padding:14px 16px;border-radius:15px;background:rgba(0,0,0,.16);display:flex;justify-content:space-between;align-items:center;font-size:13px}.action-money strong{font-size:25px}
+  .time-focus{min-height:92svh;padding-top:82px;padding-bottom:82px;background:radial-gradient(80% 55% at 88% 7%,rgba(241,95,102,.35),transparent 65%),linear-gradient(160deg,#130826,#2c1452 58%,#471a63);color:#fff}
+  .time-focus .kicker{color:#efcfff}.time-focus .kicker::before{background:#f58c91}
+  .time-focus h2 span{color:#f4a0a5}
+  .time-compare{margin-top:30px;border-radius:26px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.17);padding:29px 16px;text-align:center;box-shadow:0 28px 60px -38px rgba(0,0,0,.85)}
+  .time-values{display:flex;align-items:center;justify-content:center;gap:14px}.time-values s{font-size:42px;font-weight:900;color:#a99db8}.time-values i{font-style:normal;color:#f4a0a5;font-size:28px}.time-values strong{font-size:64px;color:#fff;line-height:1;text-shadow:0 8px 28px rgba(154,118,239,.35)}.time-compare p{margin-top:18px;font-size:16px;line-height:1.65;color:#d9cee8}
+  .time-save-badge{display:inline-flex;margin-top:18px;padding:8px 14px;border-radius:999px;background:#f15f66;color:#fff;font-size:14px;font-weight:900}
+  .detail-table{margin-top:18px;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
+  .detail-row{display:grid;grid-template-columns:1.25fr .72fr .28fr .72fr .72fr;gap:4px;padding:15px 10px;border-bottom:1px solid var(--line);align-items:center;font-size:12.5px;white-space:nowrap}
+  .detail-row:last-child{border-bottom:0}.detail-row.head{background:#f5f1f8;color:#8d8494;font-weight:900}.detail-row b{font-size:14px}.detail-row .new{color:var(--purple);font-size:16px;font-weight:900}.detail-row .save{color:var(--green);font-weight:900;text-align:right}
+  .time-focus>.reveal>.lead{color:#e9dff5;font-size:19px;line-height:1.65}
+  .final{padding:88px 24px 70px;background:
+    radial-gradient(90% 65% at 80% 5%,rgba(241,95,102,.28),transparent 60%),
+    linear-gradient(160deg,#160a2b,#291147 65%,#0b0612);color:#fff;text-align:center}
+  .final .seal{display:flex;width:74px;height:74px;border-radius:24px;margin:0 auto 24px;align-items:center;justify-content:center;background:rgba(98,221,160,.1);border:1px solid rgba(98,221,160,.25);font-size:30px}
+  .final h2{font-size:34px}.final p{margin-top:17px;color:#c8badc;font-size:16px;line-height:1.7}
+  .cta{display:flex;flex-direction:column;gap:10px;margin-top:28px}.cta a{border-radius:16px;padding:17px;font-size:15px;font-weight:900}.cta .primary{background:linear-gradient(135deg,#9a76ef,#7147e8);color:#fff}.cta .ghost{border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);color:#ddd1ee}
+  .final .foot{margin-top:28px;color:#827499;font-size:11px;line-height:1.65}
+  .reveal{opacity:0;transform:translateY(20px);transition:opacity .65s ease,transform .65s ease}.reveal.in{opacity:1;transform:none}
+  .lightbox{position:fixed;inset:0;z-index:200;background:rgba(8,5,14,.96);display:none;align-items:center;justify-content:center;padding:50px 10px 18px}
+  .lightbox.open{display:flex}.lightbox img{max-width:100%;max-height:calc(100svh - 80px);object-fit:contain;border-radius:8px;background:#fff}.lightbox button{position:absolute;right:14px;top:14px;width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.1);color:#fff;font-size:22px}
+  .to-top{position:fixed;z-index:85;right:max(14px,calc((100vw - var(--max))/2 + 14px));bottom:18px;width:44px;height:44px;border-radius:50%;border:0;background:rgba(25,13,48,.9);color:#fff;font-size:17px;box-shadow:0 10px 25px rgba(20,10,35,.3);opacity:0;pointer-events:none;transition:.25s}.to-top.show{opacity:1;pointer-events:auto}
+  @media(min-width:560px){.page{padding-left:38px;padding-right:38px}.tier-section{padding-left:30px;padding-right:30px}.program-copy{padding-left:24px;padding-right:24px}}
+  @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.reveal{opacity:1;transform:none;transition:none}.scroll-cue i::after{animation:none}}
+</style>
+</head>
+<body>
+<div class="scroll-progress"><i id="progress"></i></div>
+<div class="brochure" id="top">
+  <header class="topbar">
+    <div class="brand">ANA<span>X</span></div>
+    <div class="top-sub">병원 AX 자동화</div>
+    <div class="sample">소개용 · 샘플 데이터</div>
+  </header>
+  <nav class="quick-nav" aria-label="브로슈어 바로가기">
+    <a href="#story">ANAX</a><a class="sec" href="#security">보안</a><a href="#time-focus">40분 → 2분</a><a class="basic" href="#basic">BASIC</a><a class="pro" href="#pro">PRO</a><a href="#effect">도입 효과</a>
+  </nav>
+
+  <main>
+    <section class="page cover" data-page="01">
+      <div class="edition">ANAX DESKTOP · 산부인과판 v3.0</div>
+      <h1>같은 아침,<br>원장님의<br>모닝브리핑은<br><span>이 화면 하나로</span><br>끝납니다</h1>
+      <p class="subtitle">매일 아침, 원장님이 가장 먼저 확인하는 두 가지.<br>어제의 결과와 오늘 챙길 일을 ANAX가 미리 정리합니다.</p>
+      <div class="cover-proof">
+        <div><strong>어제 어땠나</strong><span>매출·신환·재방문을 한눈에</span></div>
+        <div><strong>오늘 누구를<br>챙기나</strong><span>놓치면 안 될 환자를 먼저</span></div>
+      </div>
+      <div class="cover-time"><span>매일 아침 준비 시간</span><strong>40분 → 2분</strong></div>
+      <div class="scroll-cue"><i></i><span>아래로 내려 ANAX 살펴보기</span></div>
+    </section>
+
+    <section class="page dark" data-page="05">
+      <div class="reveal">
+        <div class="kicker">20개 병원에서 검증했습니다</div>
+        <h2>10년의 운영 경험이<br><span class="coral">1000억 매출</span>로 이어졌습니다</h2>
+        <p class="lead">책상에서 만든 이론이 아닙니다. 현장에서 직접 부딪히며 다듬은 운영 방식이 ANAX의 기준이 됐습니다.</p>
+        <div class="metric-grid">
+          <div class="metric"><strong>3~10배</strong><b>컨설팅 이후 매출 증가</b><small>기존 소개 자료 기준</small></div>
+          <div class="metric"><strong class="compact">3,000만원</strong><b>컨설팅 노하우 가치</b><small>구독 서비스에 포함</small></div>
+        </div>
+        <div class="quote">ANAX는 기능만 제공하지 않습니다.<br>성과를 만든 운영 방식까지 함께 제공합니다.</div>
+      </div>
+    </section>
+
+    <section class="page cream" data-page="03">
+      <div class="reveal">
+        <div class="kicker">ANAX가 일하는 방식</div>
+        <h2>원장님의 판단은 남기고<br>반복 업무는<br><span class="purple">ANAX에 맡깁니다</span></h2>
+        <div class="duo">
+          <div class="duo-card"><i>✦</i><small>반복 업무를 대신하는</small><strong>위임<br>시스템</strong></div>
+          <div class="duo-card"><i>✦</i><small>환자의 선택을 돕는</small><strong>매출<br>전략</strong></div>
+        </div>
+        <p class="lead">ANAX가 해야 할 일을 찾아 우선순위를 정리하면, 원장님은 확인하고 결정만 하면 됩니다.</p>
+      </div>
+    </section>
+
+    <section class="page white" data-page="04">
+      <div class="reveal">
+        <div class="kicker">병원을 아는 프로그램</div>
+        <h2>기능만 많은 프로그램과<br><span class="purple">출발점부터 다릅니다</span></h2>
+        <div class="compare-stack">
+          <div class="compare-card"><span>일반 프로그램</span><b>기능을 먼저 만들었습니다</b><p>화면은 많지만, 원장님이 다시 찾아보고 판단해야 합니다.</p></div>
+          <div class="compare-card highlight"><span>ANAX</span><b>병원 운영에서 시작했습니다</b><p>20개 병원을 직접 운영하며 쌓은 판단 기준을 업무 흐름에 담았습니다.</p></div>
+        </div>
+        <div class="quote" style="color:var(--ink)">원장님이 매일 하던 판단을,<br><span class="purple">이제 ANAX가 준비합니다.</span></div>
+      </div>
+    </section>
+
+    <section class="page soft" id="story" data-page="02">
+      <div class="reveal">
+        <div class="kicker">ANAX 모닝브리핑</div>
+        <h2>원장님이 찾기 전에<br><span class="purple">답과 실행 순서가</span><br>먼저 준비됩니다</h2>
+        <p class="lead">여러 화면을 오가며 숫자를 찾을 필요가 없습니다. 어제의 결과와 오늘의 우선순위를 한 화면에서 바로 확인합니다.</p>
+        <figure class="screen-shell">
+          <img class="zoomable" src="assets/screen-01.webp" alt="ANAX 모닝브리핑 전체 프로그램 화면">
+          <figcaption class="screen-note"><span>ANAX DESKTOP</span><span>화면을 눌러 확대</span></figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="page security" id="security" data-page="06">
+      <div class="reveal">
+        <div class="kicker">Privacy & Security by Design</div>
+        <div class="security-hero">
+          <div class="lock"><svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><path d="M12 14.5v2.7"/></svg></div>
+          <h2 style="margin-top:0">환자 정보는<br>병원 밖으로<br><span class="green">나가지 않습니다</span></h2>
+        </div>
+        <p class="lead">환자 정보가 어디에서 처리되고 어디까지 전달되는지, 기능보다 먼저 기준을 세웠습니다.</p>
+        <div class="data-flow">
+          <div class="flow-title">병원 내부 처리 영역</div>
+          <div class="flow-row">
+            <div class="flow-node">기존 시스템<br>EMR·예약</div><div class="flow-arrow">→</div>
+            <div class="flow-node">ANAX<br>로컬 분석</div><div class="flow-arrow">→</div>
+            <div class="flow-node">결과 화면<br>브리핑</div>
+          </div>
+        </div>
+        <div class="security-list">
+          <div class="security-item"><i>1</i><div><b>환자 정보는 병원 PC 안에서 처리합니다</b><p>원본 데이터를 외부로 가져가지 않고 병원 내부에서 분석합니다.</p></div></div>
+          <div class="security-item"><i>2</i><div><b>외부 AI에는 환자 원본을 보내지 않습니다</b><p>이름·차트번호·연락처·진료 원문은 외부 AI로 전송하지 않습니다.</p></div></div>
+          <div class="security-item"><i>3</i><div><b>원장님이 승인해야 실행됩니다</b><p>승인 전에는 문자 한 통도 발송되지 않습니다.</p></div></div>
+          <div class="security-item"><i>4</i><div><b>누가 무엇을 승인했는지 남깁니다</b><p>승인부터 실행까지 전 과정을 기록으로 확인할 수 있습니다.</p></div></div>
+          <div class="security-item"><i>5</i><div><b>실제 개인정보 없이 먼저 확인합니다</b><p>샘플·가명 데이터를 쓰는 데모 모드로 충분히 검증합니다.</p></div></div>
+          <div class="security-item"><i>6</i><div><b>기존 시스템은 그대로 사용합니다</b><p>필요한 기능만 병원 환경에 맞춰 단계적으로 연결합니다.</p></div></div>
+        </div>
+        <p class="security-foot">외부로 전달되는 것은 ‘작업 완료’ 신호뿐입니다. 보안 구조와 연동 범위는 병원 환경을 먼저 점검한 뒤 확정하며, 문자 발송은 병원이 승인한 기존 경로를 이용합니다.</p>
+      </div>
+    </section>
+
+    <section class="page dark" data-page="07">
+      <div class="reveal">
+        <div class="kicker">왜 지금이어야 하는가</div>
+        <h2>AI 도입을 미루는 동안<br>병원 운영의 격차는<br><span class="coral">이미 벌어지고 있습니다</span></h2>
+        <div class="stat-cards">
+          <div class="stat-card"><strong>47.7%</strong><b>의료 AI를 경험한 국내 의사</b><small>한국보건산업진흥원, 2025</small></div>
+          <div class="stat-card"><strong>88%</strong><b>AI를 활용하는 글로벌 기업</b><small>McKinsey, 2025</small></div>
+          <div class="stat-card"><strong>44%</strong><b>헬스케어 AI 시장 연평균 성장률</b><small>Fortune Business Insights, 2026</small></div>
+          <div class="stat-card"><strong>42%</strong><b>AI 시장 내 병원·클리닉 비중</b><small>Fortune Business Insights, 2026</small></div>
+        </div>
+        <div class="quote">환자는 줄어드는데, 인건비와 고정비는 줄지 않습니다.<br>이제 운영 효율은 선택이 아니라 생존의 문제입니다.</div>
+        <p class="tiny" style="margin-top:14px;color:#8f81aa">수치와 출처는 기존 ANAX 소개 자료를 기준으로 작성했습니다.</p>
+      </div>
+    </section>
+
+    <section class="page cream" data-page="08">
+      <div class="reveal">
+        <div class="kicker">매일 아침, 원장실</div>
+        <h2>원장님이 아침마다<br>확인하는 건 결국<br><span class="purple">두 가지</span>입니다</h2>
+        <div class="question-list">
+          <div class="question"><i>Q1</i><div><b>어제, 우리 병원은 어땠나</b><p>매출은 어땠고, 신환과 재방문은 어떻게 달라졌나</p></div></div>
+          <div class="question"><i>Q2</i><div><b>오늘, 누구를 챙겨야 하나</b><p>다시 올 환자는 누구고, 오늘 꼭 연락할 사람은 누구인가</p></div></div>
+        </div>
+        <div class="friction">
+          <ul>
+            <li><span>매출 화면을 열고 기간 설정</span><b>클릭 31회</b></li>
+            <li><span>신환·재방문을 따로 조회</span><b>화면 9개</b></li>
+            <li><span>예약·취소 명단을 일일이 대조</span><b>조건 14개</b></li>
+            <li><span>대상자를 고르고 문자 작성</span><b>직접 처리</b></li>
+          </ul>
+          <div class="friction-total"><span>매일 반복되는 준비 시간</span><strong>40분</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="page white" data-page="10">
+      <div class="reveal">
+        <div class="kicker">ANAX SERVICE LINE-UP</div>
+        <h2>필요한 범위부터<br><span class="purple">2단계</span>로 시작할 수 있습니다</h2>
+        <div class="tier-intro">
+          <a class="tier-card" href="#basic"><div class="tier-code">BASIC</div><div><h3>매일 놓치는 일을 먼저 챙깁니다</h3><p>놓친 환자, 문의, 빈 예약 시간과 수납까지 기본 운영을 빠짐없이 챙깁니다.</p><span class="count">8 MODULES</span></div></a>
+          <a class="tier-card pro" href="#pro"><div class="tier-code">PRO</div><div><h3>상담과 매출까지 넓힙니다</h3><p>고객 관리, 상담 품질, 비급여 성과를 한 단계 더 정교하게 관리합니다.</p><span class="count">8 MODULES</span></div></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="tier-section" id="basic">
+      <div class="tier-head reveal">
+        <div class="tier-label">BASIC · 8 MODULES</div>
+        <h2>매일 놓치던 일을<br><span class="purple">하나씩 줄입니다</span></h2>
+        <p>아침 브리핑부터 검사 결과 안내, 미내원 환자, 빈 예약 시간, 문의, 수납 마감까지 매일 챙겨야 할 일을 한곳에 모았습니다.</p>
+      </div>
+      <div class="program-list">
+        <article class="program-card reveal"><div class="program-copy"><div class="program-code">BASIC 01</div><h3>ANAX 모닝 브리핑</h3><p>어제의 결과와 오늘 할 일을 우선순위대로 한 화면에 보여줍니다.</p></div><div class="screen-wrap"><img class="zoomable" loading="lazy" src="assets/screen-02.webp" alt="ANAX 모닝 브리핑 화면"><span class="zoom-tag">탭하여 확대</span></div><div class="sample-strip">소개용 샘플 데이터</div></article>
+        <article class="program-card reveal"><div class="program-copy"><div class="program-code">BASIC 02</div><h3>일일 경영 현황</h3><p>매출, 신환, 재방문, 객단가, 예약 유지율을 전날과 바로 비교합니다.</p></div><div class="screen-wrap"><img class="zoomable" loading="lazy" src="assets/screen-03.webp" alt="일일 경영 현황 화면"><span class="zoom-tag">탭하여 확대</span></div><div class="sample-strip">소개용 샘플 데이터</div></article>
+        <article class="program-card reveal"><div class="program-copy"><div class="program-code">BASIC 03</div><h3>검사결과 통보 관리</h3><p>검사 결과가 등록된 뒤 안내와 확인, 재안내까지 빠짐없이 이어집니다.</p></div><div class="screen-wrap"><img class="zoomable" loading="lazy" src="assets/screen-04.webp" alt="검사결과 통보 관리 화면"><span class="zoom-tag">탭하여 확대</span></div><div class="sample-strip">소개용 샘플 데이터</div></article>
+        <article class="program-card reveal"><div class="program-copy"><div class="program-code">BASIC 04</div><h3>미내원 환자 리콜</h3><p>검진 주기와 마지막 내원일을 살펴 다시 올 가능성이 높은 환자를 찾아냅니다.</p></div><div class="screen-wrap"><img class="zoomable" loading="lazy" src="assets/screen-05.webp" alt="미내원 환자 리콜 화면"><span class="zoom-tag">탭하여 확대</span></div><div class="sample-strip">소개용 샘플 데이터</div></article>
+        <article class="program-card reveal"><div class="program-copy"><div class="program-code">BASIC 05</div><h3>빈 예약 시간 관리</h3><p>예약 취소로 빈 시간이 생기면, 해당 시간에 맞는 환자를 먼저 찾아줍니다.</p></div><div class="screen-wrap"><img class="zoomable" loading="lazy" src="assets/screen-06.webp" alt="빈 예약 시간 관리 화면"><span class="zoom-tag">탭하여 확대</span></div><div class="sample-strip">소개용 샘플 데이터</div></article>
+        <article class="program-card reveal"><div class="program-copy"><div class="program-code">BASIC 06</div><h3>문의 접수 관리</h3><p>전화, 카카오톡, 네이버, 홈페이지로 들어온 문의를 한곳에서 확인합니다.</p></div><div class="screen-wrap"><img class="zoomable" loading="lazy" src="assets/screen-07.webp" alt="문의 접수 관리 화면"><span class="zoom-tag">탭하여 확대</span></div><div class="sample-strip">소개용 샘플 데이터</div></article>
+        <article class="program-card reveal"><div class="program-copy"><div class="program-code">BASIC 07</div><h3>수납 마감 확인</h3><p>EMR 수납 내역과 카드 정산 금액을 날짜별로 맞춰 보고 차이를 찾아냅니다.</p></div><div class="screen-wrap"><img class="zoomable" loading="lazy" src="assets/screen-08.webp" alt="수납 마감 확인 화면"><span class="zoom-tag">탭하여 확대</span></div><div class="sample-strip">소개용 샘플 데이터</div></article>
+        <article class="program-card reveal"><div class="program-copy"><div class="program-code">BASIC 08</div><h3>고객 현황 스냅샷</h3><p>신환, 재방문, VIP, 휴면 환자의 변화를 매일 한눈에 보여줍니다.</p></div><div class="screen-wrap"><img class="zoomable" loading="lazy" src="assets/screen-09.webp" alt="고객 현황 스냅샷 화면"><span class="zoom-tag">탭하여 확대</span></div><div class="sample-strip">소개용 샘플 데이터</div></article>
+      </div>
+    </section>
+
+    <section class="page soft" id="effect" data-page="11">
+      <div class="reveal">
+        <div class="kicker">BASIC이 만드는 변화</div>
+        <h2>놓치던 환자와 상담을<br><span class="purple">끝까지</span> 챙깁니다</h2>
+        <div class="outcome-grid">
+          <div class="outcome"><strong>35%</strong><span>노쇼 감소</span></div>
+          <div class="outcome"><strong>28%</strong><span>재방문 증가</span></div>
+          <div class="outcome"><strong>100%</strong><span>상담 응대율</span></div>
+          <div class="outcome"><strong>24h</strong><span>무중단 운영</span></div>
+        </div>
+        <p class="tiny" style="margin-top:12px;text-align:center">기존 ANAX 소개 자료의 도입 사례 기준이며, 결과는 병원 상황에 따라 달라질 수 있습니다.</p>
+        <div class="action-card">
+          <div class="tag">오늘 가장 먼저 챙길 일</div>
+          <h3>이탈 환자 리콜</h3>
+          <ul><li>재방문 가능성이 높은 환자 12명 선별</li><li>환자별 안내 문구까지 준비</li><li>원장님이 승인하면 바로 실행</li></ul>
+          <div class="action-money"><span>복귀 예상 매출 · 샘플</span><strong>+480만원</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tier-section pro-bg" id="pro">
+      <div class="tier-head reveal">
+        <div class="tier-label">PRO · 8 MODULES</div>
+        <h2>상담의 빈틈을 줄여<br><span style="color:#ad4828">매출로 이어지게</span> 합니다</h2>
+        <p>고객 분류부터 상담 진행, 직원 응대, 비급여 성과까지 상담의 전 과정을 한 흐름으로 관리합니다.</p>
+      </div>
+      <div class="program-list">
+        <article class="program-card reveal"><div class="program-copy"><div class="program-code">PRO 09</div><h3>고객 관리</h3><p>VIP 일정, 소개 환자, 휴면 환자와 고객별 다음 연락 시점을 한눈에 관리합니다.</p></div><div class="screen-wrap"><img class="zoomable" loading="lazy" src="assets/screen-10.webp" alt="고객 관리 화면"><span class="zoom-tag">탭하여 확대</span></div><div class="sample-strip">소개용 샘플 데이터</div></article>
+        <article class="program-card reveal"><div class="program-copy"><div class="program-code">PRO 10</div><h3>빈 시간 할인 판매</h3><p>비어 있는 고단가 시술 시간을 찾아, 해당 시간에 맞는 고객을 추천합니다.</p></div><div class="screen-wrap"><img class="zoomable" loading="lazy" src="assets/screen-11.webp" alt="빈 시간 할인 판매 화면"><span class="zoom-tag">탭하여 확대</span></div><div class="sample-strip">소개용 샘플 데이터</div></article>
+        <article class="program-card reveal"><div class="program-copy"><div class="program-code">PRO 11</div><h3>사전 문진표 관리</h3><p>문진표 발송 대상과 작성 여부, 재안내 상태를 한눈에 확인합니다.</p></div><div class="screen-wrap"><img class="zoomable" loading="lazy" src="assets/screen-12.webp" alt="사전 문진표 관리 화면"><span class="zoom-tag">탭하여 확대</span></div><div class="sample-strip">소개용 샘플 데이터</div></article>
+        <article class="program-card reveal"><div class="program-copy"><div class="program-code">PRO 12</div><h3>상담 대기 관리</h3><p>결정을 미룬 상담을 이유별로 나누고, 다시 연락할 시점을 놓치지 않게 알려줍니다.</p></div><div class="screen-wrap"><img class="zoomable" loading="lazy" src="assets/screen-13.webp" alt="상담 대기 관리 화면"><span class="zoom-tag">탭하여 확대</span></div><div class="sample-strip">소개용 샘플 데이터</div></article>
+        <article class="program-card reveal"><div class="program-copy"><div class="program-code">PRO 13</div><h3>상담 진행 가이드</h3><p>상담 단계에 맞는 질문과 자료, 다음 행동을 보여줘 직원마다 상담 방식이 달라지는 문제를 줄입니다.</p></div><div class="screen-wrap"><img class="zoomable" loading="lazy" src="assets/screen-14.webp" alt="상담 진행 가이드 화면"><span class="zoom-tag">탭하여 확대</span></div><div class="sample-strip">소개용 샘플 데이터</div></article>
+        <article class="program-card reveal"><div class="program-copy"><div class="program-code">PRO 14</div><h3>상담 응대 교육</h3><p>실제 상담 상황을 연습하고, 직원별로 부족한 부분을 확인해 교육에 반영합니다.</p></div><div class="screen-wrap"><img class="zoomable" loading="lazy" src="assets/screen-15.webp" alt="상담 응대 교육 화면"><span class="zoom-tag">탭하여 확대</span></div><div class="sample-strip">소개용 샘플 데이터</div></article>
+        <article class="program-card reveal"><div class="program-copy"><div class="program-code">PRO 15</div><h3>전화·채팅 응대 평가</h3><p>첫 응답 속도부터 질문 파악, 대안 제시, 마무리까지 실제 응대를 기준에 따라 평가합니다.</p></div><div class="screen-wrap"><img class="zoomable" loading="lazy" src="assets/screen-16.webp" alt="전화 채팅 응대 평가 화면"><span class="zoom-tag">탭하여 확대</span></div><div class="sample-strip">소개용 샘플 데이터</div></article>
+        <article class="program-card reveal"><div class="program-copy"><div class="program-code">PRO 16</div><h3>비급여 매출 분석</h3><p>비급여 항목별 단가와 건수, 비중, 재구매 흐름을 비교해 떨어지는 항목을 바로 찾습니다.</p></div><div class="screen-wrap"><img class="zoomable" loading="lazy" src="assets/screen-17.webp" alt="비급여 매출 분석 화면"><span class="zoom-tag">탭하여 확대</span></div><div class="sample-strip">소개용 샘플 데이터</div></article>
+      </div>
+    </section>
+
+
+    <section class="page time-focus" id="time-focus" data-page="09">
+      <div class="reveal">
+        <div class="kicker">ANAX의 가장 큰 변화</div>
+        <h2>40분 걸리던 아침 업무가<br><span>2분이면 끝납니다</span></h2>
+        <div class="time-compare">
+          <div class="time-values"><s>40분</s><i>→</i><strong>2분</strong></div>
+          <div class="time-save-badge">매일 38분 절약</div>
+          <p>찾고, 비교하고, 정리하던 38분을<br>원장님의 판단과 진료에 돌려드립니다.</p>
+        </div>
+        <div class="detail-table">
+          <div class="detail-row head"><span>항목</span><span>기존</span><span></span><span>ANAX</span><span>절감</span></div>
+          <div class="detail-row"><b>클릭</b><span>31회</span><span>→</span><span class="new">2회</span><span class="save">-94%</span></div>
+          <div class="detail-row"><b>화면 이동</b><span>9회</span><span>→</span><span class="new">0회</span><span class="save">-100%</span></div>
+          <div class="detail-row"><b>조회 조건</b><span>14개</span><span>→</span><span class="new">0개</span><span class="save">-100%</span></div>
+          <div class="detail-row"><b>소요 시간</b><span>40분</span><span>→</span><span class="new">2분</span><span class="save">-95%</span></div>
+        </div>
+        <p class="lead" style="text-align:center">숫자를 찾는 아침에서,<br><b>숫자로 결정하는 아침으로.</b></p>
+      </div>
+    </section>
+
+    <section class="final">
+      <div class="seal">✓</div>
+      <h2>우리 병원에 맞는<br><span class="green">안전한 AI 자동화 범위</span>부터<br>확인해 보실 수 있습니다</h2>
+      <p>아래 데모모드 신청 양식을 작성해 주시면<br>개인정보 기입 없이 데모모드로 먼저 살펴보실 수 있도록 도와드립니다.</p>
+      <div class="cta">
+        <a class="primary" href="mailto:linkora@linkora.kr?subject=ANAX%20%EB%8D%B0%EB%AA%A8%EB%AA%A8%EB%93%9C%20%EC%8B%A0%EC%B2%AD&amp;body=%EC%95%88%EB%85%95%ED%95%98%EC%84%B8%EC%9A%94.%0A%0AANAX%20%EB%8D%B0%EB%AA%A8%EB%AA%A8%EB%93%9C%20%EC%9D%B4%EC%9A%A9%EC%9D%84%20%EC%8B%A0%EC%B2%AD%ED%95%A9%EB%8B%88%EB%8B%A4.%0A%0A%EB%B3%91%EC%9B%90%20%EC%9C%A0%ED%98%95%3A%20%0A%EA%B4%80%EC%8B%AC%20%EA%B8%B0%EB%8A%A5%3A%20%0A%ED%99%95%EC%9D%B8%ED%95%98%EA%B3%A0%20%EC%8B%B6%EC%9D%80%20%EC%97%85%EB%AC%B4%3A%20%0A%0A%E2%80%BB%20%ED%99%98%EC%9E%90%20%EB%B0%8F%20%EA%B0%9C%EC%9D%B8%EC%A0%95%EB%B3%B4%EB%8A%94%20%EC%9E%91%EC%84%B1%ED%95%98%EC%A7%80%20%EC%95%8A%EC%95%84%EB%8F%84%20%EB%90%A9%EB%8B%88%EB%8B%A4.">데모모드 신청</a>
+        <a class="ghost" href="#top">처음부터 다시보기</a>
+      </div>
+      <div class="foot">LINKORA ANAX · 병원 AX 자동화 프로그램</div>
+    </section>
+  </main>
+</div>
+
+<button class="to-top" id="toTop" aria-label="맨 위로">↑</button>
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="프로그램 화면 확대">
+  <button type="button" id="closeLightbox" aria-label="닫기">×</button>
+  <img id="lightboxImage" alt="">
+</div>
+
+<script>
+  const progress=document.getElementById('progress');
+  const toTop=document.getElementById('toTop');
+  const lightbox=document.getElementById('lightbox');
+  const lightboxImage=document.getElementById('lightboxImage');
+  const closeLightbox=document.getElementById('closeLightbox');
+  const updateScroll=()=>{
+    const doc=document.documentElement;
+    const max=doc.scrollHeight-doc.clientHeight;
+    progress.style.width=(max?doc.scrollTop/max*100:0)+'%';
+    toTop.classList.toggle('show',doc.scrollTop>650);
+  };
+  addEventListener('scroll',updateScroll,{passive:true});updateScroll();
+  toTop.addEventListener('click',()=>scrollTo({top:0,behavior:'smooth'}));
+  document.querySelectorAll('.zoomable').forEach(img=>img.addEventListener('click',()=>{
+    lightboxImage.src=img.src;lightboxImage.alt=img.alt;lightbox.classList.add('open');document.body.style.overflow='hidden';
+  }));
+  const close=()=>{lightbox.classList.remove('open');lightboxImage.src='';document.body.style.overflow=''};
+  closeLightbox.addEventListener('click',close);
+  lightbox.addEventListener('click',e=>{if(e.target===lightbox)close()});
+  addEventListener('keydown',e=>{if(e.key==='Escape')close()});
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.08,rootMargin:'0px 0px -40px'});
+    document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+  }else{document.querySelectorAll('.reveal').forEach(el=>el.classList.add('in'))}
+</script>
+</body>
+</html>
